@@ -1,0 +1,18 @@
+<.header>
+  Value <%= @value.id %>
+  <:subtitle>This is a value record from your database.</:subtitle>
+  <:actions>
+    <.link href={~p"/currencies/#{@currency_id}/values/#{@value}/edit"}>
+      <.button>Edit value</.button>
+    </.link>
+  </:actions>
+</.header>
+
+<.list>
+  <:item title="Date"><%= @value.date %></:item>
+  <:item title="Value"><%= @value.value %></:item>
+  <:item title="Variation"><%= @value.variation %></:item>
+  <:item title="Variation percent"><%= @value.variation_percent %></:item>
+</.list>
+
+<.back navigate={~p"/currencies/#{@currency_id}/values"}>Back to values</.back>

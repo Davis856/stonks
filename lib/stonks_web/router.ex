@@ -18,6 +18,8 @@ defmodule StonksWeb.Router do
     pipe_through :browser
 
     get "/", PageController, :home
+    resources "/currencies", CurrencyController
+    resources "/currencies/:currency_id/values", ValueController
   end
 
   # Other scopes may use custom stacks.

@@ -1,0 +1,16 @@
+<.header>
+  Currency <%= @currency.id %>
+  <:subtitle>This is a currency record from your database.</:subtitle>
+  <:actions>
+    <.link href={~p"/currencies/#{@currency}/edit"}>
+      <.button>Edit currency</.button>
+    </.link>
+  </:actions>
+</.header>
+
+<.list>
+  <:item title="Name"><%= @currency.name %></:item>
+  <:item title="Description"><%= @currency.description %></:item>
+</.list>
+
+<.back navigate={~p"/currencies"}>Back to currencies</.back>
