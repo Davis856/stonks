@@ -7,28 +7,13 @@
   </:actions>
 </.header>
 
-<.table id="currencies" rows={@currencies} row_click={&JS.navigate(~p"/currencies/#{&1}")}>
+<.table id="currencies" rows={@currencies}>
   <:col :let={currency} label="Name"><%= currency.name %></:col>
   <:col :let={currency} label="Description"><%= currency.description %></:col>
-  <:col :let={currency} label="Values">
-    <select id="currency-{@currency.id}-values">
-      <%= for other_currency <- @currencies do %>
-        <%= if other_currency.id == currency.id do %>
-          <%# don't show current currency in dropdown %>
-        <% else %>
-          <optgroup label="{@other_currency.name">
-            <%= for value <- other_currency.values do %>
-              <option value="{@value.id}"><%= value.date %> - <%= value.currency.name %> <%= value.value %></option>
-            <% end %>
-          </optgroup>
-        <% end %>
-      <% end %>
-    </select>
-  </:col>
   <:action :let={currency}>
-    <div class="sr-only">
-      <.link navigate={~p"/currencies/#{currency}"}>Show</.link>
-    </div>
+    <.link navigate={~p"/currencies/#{currency}"}>Show</.link>
+  </:action>
+  <:action :let={currency}>
     <.link navigate={~p"/currencies/#{currency}/edit"}>Edit</.link>
   </:action>
   <:action :let={currency}>
@@ -37,17 +22,3 @@
     </.link>
   </:action>
 </.table>
-
-<script>
-  let currencyValueSelects = document.querySelectorAll('[id^="currency-"][id$="-values"]');
-
-  currencyValueSelects.forEach(select => {
-    select.addEventListener('change', function() {
-      let selectedValueId = select.options[select.selectedIndex].value;
-      if (selectedValueId) {
-        let url = `/values/${selectedValueId}`;
-        window.location = url;
-      }
-    });
-  });
-</script>

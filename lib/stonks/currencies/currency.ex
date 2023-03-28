@@ -14,8 +14,8 @@ defmodule Stonks.Currencies.Currency do
   @doc false
   def changeset(currency, attrs) do
     currency
-    |> cast(attrs, [:name, :description, :values_id])
-    |> validate_required([:name, :description, :values_id])
+    |> cast(attrs, [:name, :description])
+    |> validate_required([:name, :description])
     |> unique_constraint(:name)
   end
 end

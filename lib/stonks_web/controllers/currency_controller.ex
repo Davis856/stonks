@@ -31,6 +31,14 @@ defmodule StonksWeb.CurrencyController do
     render(conn, :show, currency: currency)
   end
 
+  # defp transform_data_for_chart(currencies) do
+  #   dates = currencies |> hd() |> Map.get(:values) |> Enum.map(& &1.date)
+  #   currency_data = currencies |> Enum.map(fn currency ->
+  #     [currency.name | Map.get(currency, :values) |> Enum.map(& &1.value)]
+  #   end)
+  #   [labels: dates, datasets: currency_data] |> Poison.encode()
+  # end
+
   def edit(conn, %{"id" => id}) do
     currency = Currencies.get_currency!(id)
     changeset = Currencies.change_currency(currency)
@@ -59,4 +67,5 @@ defmodule StonksWeb.CurrencyController do
     |> put_flash(:info, "Currency deleted successfully.")
     |> redirect(to: ~p"/currencies")
   end
+
 end

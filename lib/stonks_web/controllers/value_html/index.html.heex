@@ -7,7 +7,7 @@
   </:actions>
 </.header>
 
-<.table id="values" rows={@values} row_click={&JS.navigate(~p"/values/#{&1}")}>
+<.table id="values" rows={@values} row_click={&JS.navigate(~p"/currencies/#{@currency_id}/values/#{&1}")}>
   <:col :let={value} label="Date"><%= value.date %></:col>
   <:col :let={value} label="Value"><%= value.value %></:col>
   <:action :let={value}>
@@ -22,3 +22,5 @@
     </.link>
   </:action>
 </.table>
+
+<.back navigate={~p"/currencies/#{@currency_id}"}>Back to currency</.back>

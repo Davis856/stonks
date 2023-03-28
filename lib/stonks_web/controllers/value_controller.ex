@@ -5,7 +5,7 @@ defmodule StonksWeb.ValueController do
   alias Stonks.Values.Value
 
   def index(conn, %{"currency_id" => currency_id}) do
-    values = Values.list_values()
+    values = Values.list_values_for_currency(currency_id)
     render(conn, :index, values: values, currency_id: currency_id)
   end
 

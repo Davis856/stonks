@@ -26,6 +26,10 @@ defmodule Stonks.Currencies do
     |> Repo.preload(:values)
   end
 
+  def list_currency_names do
+    Repo.all(Currency) |> Enum.map(&(&1.name))
+  end
+
   @doc """
   Gets a single currency.
 
@@ -40,7 +44,12 @@ defmodule Stonks.Currencies do
       ** (Ecto.NoResultsError)
 
   """
-  def get_currency!(id), do: Repo.get!(Currency, id)
+  def get_currency!(id), do: Repo.get!(Currency, id) |> Repo.preload(:values)
+
+  def get_currency_values!(id) do
+    currency = get_currency!(id) |> Repo.preload(:values)
+    currency.values |> Enum.map(fn v -> v.value end)
+  end
 
   @doc """
   Creates a currency.

@@ -21,6 +21,11 @@ defmodule Stonks.Values do
     Repo.all(Value)
   end
 
+  def list_values_for_currency(currency_id) do
+    query = from v in Value, where: v.currency_id == ^currency_id
+    Repo.all(query)
+  end
+
   @doc """
   Gets a single value.
 
@@ -101,4 +106,6 @@ defmodule Stonks.Values do
   def change_value(%Value{} = value, attrs \\ %{}) do
     Value.changeset(value, attrs)
   end
+
+
 end
