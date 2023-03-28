@@ -28,7 +28,14 @@ defmodule StonksWeb.CurrencyController do
 
   def show(conn, %{"id" => id}) do
     currency = Currencies.get_currency!(id)
-    render(conn, :show, currency: currency)
+    currencies = Currencies.list_currencies_with_values()
+    render(conn, :show, currency: currency, currencies: currencies)
+  end
+
+  def compare_currencies(conn, %{"currency_id" => currency_id, "compare_id" => compare_id}) do
+    currency = Currencies.get_currency!(currency_id)
+    compare = Currencies.get_currency!(compare_id)
+    render(conn, "compare_currencies.html", currency: currency, compare: compare)
   end
 
   # defp transform_data_for_chart(currencies) do

@@ -18,6 +18,7 @@ defmodule StonksWeb.Router do
     pipe_through :browser
 
     get "/", PageController, :home
+    get "/currencies/:currency_id/:compare_id/compare_currencies", CurrencyController, :compare_currencies
     resources "/currencies", CurrencyController
     resources "/currencies/:currency_id/values", ValueController
   end
