@@ -35,8 +35,19 @@ defmodule StonksWeb.CurrencyController do
   def compare_currencies(conn, %{"currency_id" => currency_id, "compare_id" => compare_id}) do
     currency = Currencies.get_currency!(currency_id)
     compare = Currencies.get_currency!(compare_id)
-    render(conn, "compare_currencies.html", currency: currency, compare: compare)
-  end
+
+    currency_values = Enum.sort_by(currency.values, &(&1.date), :desc)
+    compare_values = Enum.sort_by(compare.values, &(&1.date), :desc)
+
+    currency_date_list = for value <- currency_values, into: [], do: to_string(value.date)
+    compare_date_list = for value <- compare_values, into: [], do: to_string(value.date)
+
+    currency_values_list = for value <- currency_values, into: [], do: to_string(value.value)
+    compare_values_list = for value <- compare_values, into: [], do: to_string(value.value)
+
+    render(conn, "compare_currencies.html", currency: %{currency | values: currency_values}, compare: %{compare | values: compare_values}, currency_date_list: currency_date_list, compare_date_list: compare_date_list, currency_values_list: currency_values_list, compare_values_list: compare_values_list)
+end
+
 
   # defp transform_data_for_chart(currencies) do
   #   dates = currencies |> hd() |> Map.get(:values) |> Enum.map(& &1.date)

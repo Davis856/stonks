@@ -5,22 +5,33 @@
         <th>Date</th>
         <th><%= to_string(@currency.name) %> Value</th>
         <th><%= to_string(@compare.name) %> Value</th>
-        <th>Variation</th>
-        <th>Variation Percentage</th>
+        <th><%= Enum.join([to_string(@currency.name), to_string(@compare.name)], "/") %> Ratio</th>
+        <th>Ratio Variation</th>
+        <th>Ratio Variation Percentage</th>
       </tr>
     </thead>
     <tbody>
+      <% first_valid_row = Enum.find(@currency.values, fn value ->
+           compare_value = Enum.find(@compare.values, fn compare_value -> compare_value.date == value.date end)
+           compare_value != nil
+         end) %>
+      <% last_ratio = if first_valid_row != nil do Enum.find(@compare.values, fn value ->
+                         value.date == first_valid_row.date
+                       end).value / first_valid_row.value
+                       else 0 end %>
       <%= for value <- @currency.values do %>
         <% compare_value = Enum.find(@compare.values, fn compare_value -> compare_value.date == value.date end) %>
         <%= if compare_value do %>
-          <% variation = compare_value.value - value.value %>
-          <% variation_percentage = (variation / value.value) * 100 %>
+          <% ratio = value.value / compare_value.value %>
+          <% ratio_variation = if last_ratio != 0 do (ratio - last_ratio) / last_ratio else 0 end %>
+          <% ratio_variation_percentage = ratio_variation * 100 %>
           <tr>
             <td><%= value.date %></td>
             <td><%= value.value %></td>
             <td><%= compare_value.value %></td>
-            <td><%= Float.round(variation, 4) %></td>
-            <td><%= Float.round(variation_percentage, 4) %>%</td>
+            <td><%= Float.round(ratio, 4) %></td>
+            <td><%= Float.round(ratio_variation, 4) %></td>
+            <td><%= Float.round(ratio_variation_percentage, 4) %>%</td>
           </tr>
         <% end %>
       <% end %>
@@ -28,6 +39,16 @@
   </table>
 </div>
 
+<div id="chart"></div>
 
-  
+<script src="https://cdn.plot.ly/plotly-latest.min.js"></script>
+
+<br>
+
+<div>
+  <%= PlotlyEx.plot([%{mode: "lines", name: "CAD", x: @currency_date_list, y: @currency_values_list}, %{mode: "lines", name: "EUR", x: @compare_date_list, y: @compare_values_list}], %{title: "CAD and EUR Evolution"}) |> raw() %>
+</div>
+
+<br>
+
 <.back navigate={~p"/currencies/#{@currency.id}"}>Back to currency</.back>
