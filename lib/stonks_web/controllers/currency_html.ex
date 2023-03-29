@@ -42,4 +42,10 @@ defmodule StonksWeb.CurrencyHTML do
       end
     end)
   end
+
+  def create_ratio_variation_list(currency, compare, list) do
+    for row <- transform_currency_values(currency, compare) do
+      list ++ row.ratio_variation
+    end
+  end
 end

@@ -36,5 +36,9 @@
 </div>
 
 <br>
+<div>
+  <% ratio_variation_list = create_ratio_variation_list(@currency, @compare, []) %>
+  <%= PlotlyEx.plot([%{mode: "lines", name: "Ratio", x: @currency_date_list, y: ratio_variation_list}], %{title: "Ratio Variation Evolution"}) |> raw() %>
+</div>
 
 <.back navigate={~p"/currencies/#{@currency.id}"}>Back to currency</.back>
