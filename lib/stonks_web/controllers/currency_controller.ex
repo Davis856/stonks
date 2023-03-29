@@ -46,16 +46,7 @@ defmodule StonksWeb.CurrencyController do
     compare_values_list = for value <- compare_values, into: [], do: to_string(value.value)
 
     render(conn, "compare_currencies.html", currency: %{currency | values: currency_values}, compare: %{compare | values: compare_values}, currency_date_list: currency_date_list, compare_date_list: compare_date_list, currency_values_list: currency_values_list, compare_values_list: compare_values_list)
-end
-
-
-  # defp transform_data_for_chart(currencies) do
-  #   dates = currencies |> hd() |> Map.get(:values) |> Enum.map(& &1.date)
-  #   currency_data = currencies |> Enum.map(fn currency ->
-  #     [currency.name | Map.get(currency, :values) |> Enum.map(& &1.value)]
-  #   end)
-  #   [labels: dates, datasets: currency_data] |> Poison.encode()
-  # end
+  end
 
   def edit(conn, %{"id" => id}) do
     currency = Currencies.get_currency!(id)
