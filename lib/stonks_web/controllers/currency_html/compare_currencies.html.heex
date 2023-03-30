@@ -5,21 +5,23 @@
         <th>Date</th>
         <th><%= to_string(@currency.name) %> Value</th>
         <th><%= to_string(@compare.name) %> Value</th>
-        <th><%= Enum.join([to_string(@currency.name), to_string(@compare.name)], "/") %> Ratio</th>
+        <th><%= Enum.join([to_string(@compare.name), to_string(@currency.name)], "/") %> Ratio</th>
         <th>Ratio Variation</th>
         <th>Ratio Variation Percentage</th>
       </tr>
     </thead>
     <tbody>
       <%= for row <- transform_currency_values(@currency, @compare) do %>
-        <tr>
-          <td><%= row.date %></td>
-          <td><%= row.value %></td>
-          <td><%= row.compare_value %></td>
-          <td><%= row.ratio %></td>
-          <td><%= row.ratio_variation %></td>
-          <td><%= row.ratio_variation_percentage %>%</td>
-        </tr>
+        <%= if row do %>
+          <tr>
+            <td><%= row.date %></td>
+            <td><%= row.value %></td>
+            <td><%= row.compare_value %></td>
+            <td><%= row.ratio %></td>
+            <td><%= row.ratio_variation %></td>
+            <td><%= row.ratio_variation_percentage %>%</td>
+          </tr>
+        <% end %>
       <% end %>
     </tbody>
   </table>
@@ -32,13 +34,17 @@
 <br>
 
 <div>
-  <%= PlotlyEx.plot([%{mode: "lines", name: "CAD", x: @currency_date_list, y: @currency_values_list}, %{mode: "lines", name: "EUR", x: @compare_date_list, y: @compare_values_list}], %{title: "CAD and EUR Evolution"}) |> raw() %>
+  <%= PlotlyEx.plot([%{mode: "lines", name: @currency.name, x: @currency_date_list, y: @currency_values_list}, %{mode: "lines", name: @compare.name, x: @compare_date_list, y: @compare_values_list}], %{title: "#{@currency.name} and #{@compare.name} Evolution"}) |> raw() %>
 </div>
 
 <br>
 <div>
-  <% ratio_variation_list = create_ratio_variation_list(@currency, @compare, []) %>
-  <%= PlotlyEx.plot([%{mode: "lines", name: "Ratio", x: @currency_date_list, y: ratio_variation_list}], %{title: "Ratio Variation Evolution"}) |> raw() %>
+  <% ratio_variation_list = create_ratio_variation_list(@currency, @compare, []) |> Enum.reject(fn elem -> is_nil(elem) end) %>
+  <%= if length(ratio_variation_list) > 1 do %>
+    <%= PlotlyEx.plot([%{mode: "lines", name: "Ratio", x: @currency_date_list, y: ratio_variation_list}], %{title: "Ratio Variation Evolution"}) |> raw() %>
+  <% else %>
+    <h2 style="text-align:center">No ratio graph available at the moment.</h2>
+  <% end %>
 </div>
 
 <.back navigate={~p"/currencies/#{@currency.id}"}>Back to currency</.back>
