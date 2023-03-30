@@ -27,15 +27,17 @@
   </table>
 </div>
 
-<div id="chart"></div>
-
 <script src="https://cdn.plot.ly/plotly-latest.min.js"></script>
 
 <br>
 
 <div>
-  <%= PlotlyEx.plot([%{mode: "lines", name: @currency.name, x: @currency_date_list, y: @currency_values_list}, %{mode: "lines", name: @compare.name, x: @compare_date_list, y: @compare_values_list}], %{title: "#{@currency.name} and #{@compare.name} Evolution"}) |> raw() %>
-</div>
+  <%= if length(@currency.values) > 1 && length(@compare.values) > 1 do %>
+    <%= PlotlyEx.plot([%{mode: "lines", name: @currency.name, x: @currency_date_list, y: @currency_values_list}, %{mode: "lines", name: @compare.name, x: @compare_date_list, y: @compare_values_list}], %{title: "#{@currency.name} and #{@compare.name} Evolution"}) |> raw() %>
+  <% else %>
+    <h2 style="text-align:center; color:red">No currencies graph available at the moment, try adding more than one value to the currencies.</h2>
+  <% end %>
+  </div>
 
 <br>
 <div>
@@ -43,7 +45,7 @@
   <%= if length(ratio_variation_list) > 1 do %>
     <%= PlotlyEx.plot([%{mode: "lines", name: "Ratio", x: @currency_date_list, y: ratio_variation_list}], %{title: "Ratio Variation Evolution"}) |> raw() %>
   <% else %>
-    <h2 style="text-align:center">No ratio graph available at the moment.</h2>
+    <h2 style="text-align:center; color:red">No ratio graph available at the moment, try adding more values to the currencies.</h2>
   <% end %>
 </div>
 

@@ -34,5 +34,50 @@
   </select>
 </div>
 
+<!-- WIP - Date System
+<div>
+  <label for="select-currency">Select currency:</label>
+  <select id="select-currency">
+    <option value="">-- Select a currency --</option>
+    <%= for currency <- @currencies do %>
+      <%= if currency.id != @currency.id do %>
+        <option value={currency.id}>
+          <%= currency.name %>
+        </option>
+      <% end %>
+    <% end %>
+  </select>
+  <form method="post" action="/compare_currencies" class="compare-form" style="display: none">
+  <h2 style="color:red">WIP - This breaks the system for now. Only for testing purposes</h2>
+  <input type="hidden" name="currency_id" id="currency_id" value="">
+  <input type="hidden" name="base_currency_id" id="base_currency_id" value={@currency.id}>
+  <.label for="startDate">Start Date:</.label>
+  <input type="date" name="startDate" id="startDate">
+  <.label for="finalDate">Final Date:</.label>
+  <input type="date" name="finalDate" id="finalDate"><br><br>
+  <.button type="submit">Submit</.button>
+</form>
+</div>
+
+<br>
+
+<script>
+  const selectCurrency = document.getElementById("select-currency");
+  const compareForm = document.querySelector(".compare-form");
+  const currencyIdInput = document.getElementById("currency_id");
+  const baseCurrencyIdInput = document.getElementById("base_currency_id");
+
+  selectCurrency.addEventListener("change", () => {
+    const selectedOption = selectCurrency.options[selectCurrency.selectedIndex];
+    if (selectedOption.value !== "") {
+      compareForm.style.display = "block";
+      currencyIdInput.value = parseInt(selectedOption.value);
+      compareForm.action = `/currencies/${baseCurrencyIdInput.value}/${selectedOption.value}/compare_currencies`;
+    } else {
+      compareForm.style.display = "none";
+    }
+  });
+</script>
+End of Date System -->
 
 <.back navigate={~p"/currencies"}>Back to currencies</.back>
